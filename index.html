@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<meta charset="utf-8"/>
+<html>
+<head>
+  <title>protobufCARTATest</title>
+
+  <script src="https://cdn.rawgit.com/dcodeIO/protobuf.js/6.8.6/dist/protobuf.js"></script>
+  <script src="./qwebchannel.js"></script>
+  <script>
+    //BEGIN SETUP
+    var HelloWorld;
+    var helloWorld;
+    var buffer
+    protobuf.load("./lm.helloworld.proto", function (err, root) {
+    // protobuf.load({root:"/data/NamespaceUpdated/CARTAvis/carta/cpp/core/Data/Image/", file:"lm.helloworld.proto"}, (err, root) => {
+      if (err) throw err;
+      console.log("ROOT: ", root);
+      HelloWorld = root.lookupType("lm.helloworld");
+      console.log("HelloWorld", HelloWorld);
+      helloWorld = HelloWorld.create({ id : "1", str : "hello" });
+      buffer = HelloWorld.encode(helloWorld).finish();
+      console.log("Test encoding", buffer);
+    });
+    function output(message) {
+        var output = document.getElementById("output");
+        output.innerHTML = output.innerHTML + message + "\n";
+    }
+    function createNewSession(sessionID) {
+      if (this.QConnector) {
+        try {
+          console.log('create new Session:', sessionID);
+          this.QConnector.newSessionCreatedSlot(sessionID);
+        } catch (err) {
+          console.log('create new Session exception:', err);
+        }
+      }
+    }
+    window.onload = function() {
+      var baseUrl = "ws://127.0.0.1:4317";
+
+      output("Connecting to WebSocket server at " + baseUrl + ".");
+      var socket = new WebSocket(baseUrl);
+
+      socket.onclose = function() {
+        console.error("web channel closed");
+      };
+      socket.onerror = function(error) {
+        console.error("web channel error: " + error);
+      };
+      socket.onopen = function() {
+        output("WebSocket connected, setting up QWebChannel.");
+        new QWebChannel(socket, function(channel) {
+
+          this.QConnector = channel.objects.QConnector;
+          this.QConnector.jsCommandResultsSignal.connect(
+            (sessionID, senderSession, cmd, result, parameter) => {
+              try {
+                // if (this.receiveHandler) {
+                //   this.receiveHandler(sessionID, senderSession, cmd, result, parameter);
+                // }
+                if (cmd==='/CartaObjects/ViewManager:registerView') {
+                  console.log('get message from WebSocket Server, len:', result);
+                  console.log('sessionID:', sessionID, ';senderSession:', senderSession);
+                  QConnector.jsSendCommandSlot(0, 0, `${result}:testProtoBuf`, '');
+                }
+                else {
+                  console.log('Other return result: ', result);
+                  // var util = protobuf.util;
+                  // var buf = util.newBuffer(util.base64.length(result));
+                  // util.base64.decode(string, buf, 0);
+
+                  //https://forum.safedev.org/t/uint8array-buffer-string-conversion-in-javascript/1040
+                  var arraybuf = new TextEncoder("utf-8").encode(result);
+                  
+                  console.log(arraybuf);
+                  // var err = HelloWorld.verify(HelloWorld.toObject(arraybuf));
+                  // if (err) {
+                  //   console.log('ERROR: ', err);
+                  // }
+                  helloWorld = HelloWorld.decode(arraybuf);
+                  console.log('Decoding result:', helloWorld);
+                }
+              } catch (error) {
+                console.error('Caught error in command callback ', error);
+                console.trace();
+              }
+            });
+
+          this.createNewSession('0');
+
+          document.getElementById("send").onclick = function() {
+            
+            //调用C++公有槽函数
+            // QConnector.jsSendCommandSlot(0, 0, '/CartaObjects/DataLoader:getData', '');
+            QConnector.jsSendCommandSlot(0, 0, '/CartaObjects/ViewManager:registerView', 'pluginId:ImageViewer,index:0');
+          }
+
+
+
+
+
+
+            // make core object accessible globally
+            // window.core = channel.objects.core;
+
+
+            // document.getElementById("send").onclick = function() {
+            //     var input = document.getElementById("input");
+            //     var text = input.value;
+            //     if (!text) {
+            //         return;
+            //     }
+
+            //     output("Sent message: " + text);
+            //     input.value = "";
+                
+            //     //调用C++公有槽函数
+            //     core.receiveText(text);
+            //     core.hello(text);
+            // }
+            
+            // //连接C++信号与javascript函数
+            // core.sendText.connect(function(message) {
+            //     output("Received message: " + message);
+            // });
+
+            // core.receiveText("Client connected, ready to send/receive messages!");
+            // output("Connected to WebChannel, ready to send/receive messages!");
+        });
+      }
+    }
+    //END SETUP
+    </script>
+      <style type="text/css">
+        html {
+            height: 100%;
+            width: 100%;
+        }
+        #input {
+            width: 400px;
+            margin: 0 10px 0 0;
+        }
+        #send {
+            width: 90px;
+            margin: 0;
+        }
+        #output {
+            width: 500px;
+            height: 300px;
+        }
+    </style>
+</head>
+<body>
+  <textarea id="output"></textarea><br /> 
+  <input type="submit" id="send" value="Send" onclick="javascript:click();" />
+</body>
+</html>
