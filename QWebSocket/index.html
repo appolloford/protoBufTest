@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<meta charset="utf-8"/>
+<html>
+<head>
+  <title>protobufCARTATest</title>
+
+  <script src="https://cdn.rawgit.com/dcodeIO/protobuf.js/6.8.6/dist/protobuf.js"></script>
+  <script>
+    //BEGIN SETUP
+    var HelloWorld;
+    var helloWorld;
+    var buffer
+    protobuf.load("./lm.helloworld.proto", function (err, root) {
+    // protobuf.load({root:"/data/NamespaceUpdated/CARTAvis/carta/cpp/core/Data/Image/", file:"lm.helloworld.proto"}, (err, root) => {
+      if (err) throw err;
+      console.log("ROOT: ", root);
+      HelloWorld = root.lookupType("lm.helloworld");
+      console.log("HelloWorld", HelloWorld);
+      helloWorld = HelloWorld.create({ id : "1", str : "hello" });
+      buffer = HelloWorld.encode(helloWorld).finish();
+      console.log("Test encoding", buffer);
+    });
+
+    function output(message) {
+        var output = document.getElementById("output");
+        output.innerHTML = output.innerHTML + message + "\n";
+    }
+
+    var socket = null;
+    function sendMessage() {
+      if ( socket != null )
+      {
+        socket.send( "testProtoBuf" );
+        console.log( "string sent" );
+      }
+    }
+
+    window.onload = function() {
+      var baseUrl = "ws://127.0.0.1:4317";
+
+      output("Connecting to WebSocket server at " + baseUrl + ".");
+      socket = new WebSocket(baseUrl);
+
+      socket.onclose = function() {
+        console.error("web socket closed");
+      };
+      socket.onerror = function(error) {
+        console.error("web socket error: " + error);
+      };
+      socket.onopen = function() {
+        output("WebSocket connected.");
+      }
+      socket.onmessage = function(msg) {
+        var result = msg.data;
+        console.log("Received message:", result);
+        var arraybuf = new TextEncoder("utf-8").encode(result);
+        console.log(arraybuf);
+        var helloWorld = HelloWorld.decode(arraybuf);
+        console.log('Decoding result:', helloWorld);
+      }
+    }
+    //END SETUP
+    </script>
+      <style type="text/css">
+        html {
+            height: 100%;
+            width: 100%;
+        }
+        #input {
+            width: 400px;
+            margin: 0 10px 0 0;
+        }
+        #send {
+            width: 90px;
+            margin: 0;
+        }
+        #output {
+            width: 500px;
+            height: 300px;
+        }
+    </style>
+</head>
+<body>
+  <textarea id="output"></textarea><br /> 
+  <button onClick="sendMessage();">Send</button>
+</body>
+</html>
