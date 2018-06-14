@@ -17,7 +17,7 @@
       console.log("ROOT: ", root);
       HelloWorld = root.lookupType("lm.helloworld");
       console.log("HelloWorld", HelloWorld);
-      helloWorld = HelloWorld.create({ id : "1", str : "hello" });
+      helloWorld = HelloWorld.create({ id : "101", str : "hello" });
       console.log('helloWorld: ', helloWorld);
       buffer = HelloWorld.encode(helloWorld).finish();
       testDecode = HelloWorld.decode(buffer);
@@ -44,8 +44,10 @@
     function sendMessage() {
       if ( socket != null )
       {
-        socket.send( "testProtoBuf" );
-        console.log( "string sent" );
+        // socket.send( "testProtoBuf" );
+        socket.send(buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.length));
+        // console.log( "string sent" );
+        console.log( "binary sent" );
       }
     }
 
@@ -54,6 +56,9 @@
 
       output("Connecting to WebSocket server at " + baseUrl + ".");
       socket = new WebSocket(baseUrl);
+
+      // Setting binaryType to accept received binary as either 'blob' or 'arraybuffer'
+      socket.binaryType = 'arraybuffer';
 
       socket.onclose = function() {
         console.error("web socket closed");
@@ -66,13 +71,22 @@
       }
       socket.onmessage = function(msg) {
         console.log("Received message:", msg.data);
-        blobToArrayBuffer(msg.data).then(buffer => {
-          console.log('buffer: ', buffer.explicitOriginalTarget.result);
-          var u8 = new Uint8Array(buffer.explicitOriginalTarget.result);
-          console.log('u8: ', u8);
-	        var helloWorld = HelloWorld.decode(u8);
-          console.log('Decoding result:', helloWorld);
-        });
+        var u8 = new Uint8Array(msg.data);
+        console.log('u8: ', u8);
+        var helloWorld = HelloWorld.decode(u8);
+        console.log('Decoding result:', helloWorld);
+
+
+
+        // blobToArrayBuffer(msg.data).then(buffer => {
+          // Don't know why going through the explicitOriginalTarget
+          // console.log('buffer: ', buffer.explicitOriginalTarget.result);
+
+        //   var u8 = new Uint8Array(buffer.explicitOriginalTarget.result);
+        //   console.log('u8: ', u8);
+	      //   var helloWorld = HelloWorld.decode(u8);
+        //   console.log('Decoding result:', helloWorld);
+        // });
         // use the JS API to convert to the ArrayBuffer from BLOB.
         // var fileReader = new FileReader();
         // fileReader.onload = (event) => {
