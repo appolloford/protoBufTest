@@ -32,4 +32,5 @@ HEADERS += \
     rpc-http.h
 
 INCLUDEPATH += /usr/include
+INCLUDEPATH += /usr/local/include
 LIBS += -L/usr/lib/ -lprotobuf -pthread  -lpthread

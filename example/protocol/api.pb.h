@@ -30,6 +30,7 @@
 #include "listener.pb.h"  // IWYU pragma: export
 #include "reflector.pb.h"  // IWYU pragma: export
 #include "calculator.pb.h"  // IWYU pragma: export
+#include "lm.helloworld.pb.h"  // IWYU pragma: export
 // @@protoc_insertion_point(includes)
 
 namespace protobuf_api_2eproto {

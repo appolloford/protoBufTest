@@ -56,7 +56,7 @@ assert.ok(Api);
 assert.ok(Api.Listener);
 assert.ok(Api.Reflector);
 assert.ok(Api.Calculator);
-
+assert.ok(Api.Lm);
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -72,45 +72,52 @@ function subscriber(rpc_req) {
 function processor(rpc_req, opts) {
 
     switch (rpc_req.name) {
-        case '.Reflector.Service.ack':
-            req = Api.Reflector.AckRequest.decode(rpc_req.data);
-            res = Api.Reflector.AckResult.encode({
-                timestamp: req.timestamp
-            });
-            break;
+        // case '.Reflector.Service.ack':
+        //     req = Api.Reflector.AckRequest.decode(rpc_req.data);
+        //     res = Api.Reflector.AckResult.encode({
+        //         timestamp: req.timestamp
+        //     });
+        //     break;
+        //
+        // case '.Calculator.Service.add':
+        //     req = Api.Calculator.AddRequest.decode(rpc_req.data);
+        //     res = Api.Calculator.AddResult.encode({
+        //         value: req.lhs + req.rhs
+        //     });
+        //     break;
+        //
+        // case '.Calculator.Service.sub':
+        //     req = Api.Calculator.SubRequest.decode(rpc_req.data);
+        //     res = Api.Calculator.SubResult.encode({
+        //         value: req.lhs - req.rhs
+        //     });
+        //     break;
+        //
+        // case '.Calculator.Service.mul':
+        //     req = Api.Calculator.MulRequest.decode(rpc_req.data);
+        //     res = Api.Calculator.MulResult.encode({
+        //         value: req.lhs * req.rhs
+        //     });
+        //     break;
+        //
+        // case '.Calculator.Service.div':
+        //     req = Api.Calculator.DivRequest.decode(rpc_req.data);
+        //     res = Api.Calculator.DivResult.encode({
+        //         value: Math.floor(req.lhs / req.rhs)
+        //     });
+        //     break;
+        //
+        // case '.Listener.Service.sub':
+        //     req = Api.Listener.SubRequest.decode(rpc_req.data);
+        //     res = Api.Listener.SubResult.encode({
+        //         timestamp: opts && opts.timestamp || req.timestamp
+        //     });
+        //     break;
 
-        case '.Calculator.Service.add':
-            req = Api.Calculator.AddRequest.decode(rpc_req.data);
-            res = Api.Calculator.AddResult.encode({
-                value: req.lhs + req.rhs
-            });
-            break;
-
-        case '.Calculator.Service.sub':
-            req = Api.Calculator.SubRequest.decode(rpc_req.data);
-            res = Api.Calculator.SubResult.encode({
-                value: req.lhs - req.rhs
-            });
-            break;
-
-        case '.Calculator.Service.mul':
-            req = Api.Calculator.MulRequest.decode(rpc_req.data);
-            res = Api.Calculator.MulResult.encode({
-                value: req.lhs * req.rhs
-            });
-            break;
-
-        case '.Calculator.Service.div':
-            req = Api.Calculator.DivRequest.decode(rpc_req.data);
-            res = Api.Calculator.DivResult.encode({
-                value: Math.floor(req.lhs / req.rhs)
-            });
-            break;
-
-        case '.Listener.Service.sub':
-            req = Api.Listener.SubRequest.decode(rpc_req.data);
-            res = Api.Listener.SubResult.encode({
-                timestamp: opts && opts.timestamp || req.timestamp
+        case '.Lm.lm_Service.sub':
+            req = Api.Lm.HelloworldRequest.decode(rpc_req.data);
+            res = Api.Lm.HelloworldResponse.encode({
+                str: "hello " + req.id + "!"
             });
             break;
 
