@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='reflector.proto',
   package='Reflector',
   syntax='proto3',
-  serialized_pb=_b('\n\x0freflector.proto\x12\tReflector\"\x1f\n\nAckRequest\x12\x11\n\ttimestamp\x18\x01 \x01(\t\"\x1e\n\tAckResult\x12\x11\n\ttimestamp\x18\x01 \x01(\t2=\n\x07Service\x12\x32\n\x03\x61\x63k\x12\x15.Reflector.AckRequest\x1a\x14.Reflector.AckResultb\x06proto3')
+  serialized_pb=_b('\n\x0freflector.proto\x12\tReflector\"\x1f\n\nAckRequest\x12\x11\n\ttimestamp\x18\x01 \x01(\t\"\x1e\n\tAckResult\x12\x11\n\ttimestamp\x18\x01 \x01(\t\"9\n\x11helloworldRequest\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0b\n\x03str\x18\x02 \x01(\t\x12\x0b\n\x03opt\x18\x03 \x01(\x05\".\n\x12helloworldResponse\x12\x0b\n\x03str\x18\x01 \x01(\t\x12\x0b\n\x03opt\x18\x02 \x01(\x05\x32P\n\nlm_Service\x12\x42\n\x03sub\x12\x1c.Reflector.helloworldRequest\x1a\x1d.Reflector.helloworldResponse2=\n\x07Service\x12\x32\n\x03\x61\x63k\x12\x15.Reflector.AckRequest\x1a\x14.Reflector.AckResultb\x06proto3')
 )
 
 
@@ -86,8 +86,93 @@ _ACKRESULT = _descriptor.Descriptor(
   serialized_end=93,
 )
 
+
+_HELLOWORLDREQUEST = _descriptor.Descriptor(
+  name='helloworldRequest',
+  full_name='Reflector.helloworldRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='id', full_name='Reflector.helloworldRequest.id', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='str', full_name='Reflector.helloworldRequest.str', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='opt', full_name='Reflector.helloworldRequest.opt', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=95,
+  serialized_end=152,
+)
+
+
+_HELLOWORLDRESPONSE = _descriptor.Descriptor(
+  name='helloworldResponse',
+  full_name='Reflector.helloworldResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='str', full_name='Reflector.helloworldResponse.str', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='opt', full_name='Reflector.helloworldResponse.opt', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=154,
+  serialized_end=200,
+)
+
 DESCRIPTOR.message_types_by_name['AckRequest'] = _ACKREQUEST
 DESCRIPTOR.message_types_by_name['AckResult'] = _ACKRESULT
+DESCRIPTOR.message_types_by_name['helloworldRequest'] = _HELLOWORLDREQUEST
+DESCRIPTOR.message_types_by_name['helloworldResponse'] = _HELLOWORLDRESPONSE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 AckRequest = _reflection.GeneratedProtocolMessageType('AckRequest', (_message.Message,), dict(
@@ -104,16 +189,54 @@ AckResult = _reflection.GeneratedProtocolMessageType('AckResult', (_message.Mess
   ))
 _sym_db.RegisterMessage(AckResult)
 
+helloworldRequest = _reflection.GeneratedProtocolMessageType('helloworldRequest', (_message.Message,), dict(
+  DESCRIPTOR = _HELLOWORLDREQUEST,
+  __module__ = 'reflector_pb2'
+  # @@protoc_insertion_point(class_scope:Reflector.helloworldRequest)
+  ))
+_sym_db.RegisterMessage(helloworldRequest)
+
+helloworldResponse = _reflection.GeneratedProtocolMessageType('helloworldResponse', (_message.Message,), dict(
+  DESCRIPTOR = _HELLOWORLDRESPONSE,
+  __module__ = 'reflector_pb2'
+  # @@protoc_insertion_point(class_scope:Reflector.helloworldResponse)
+  ))
+_sym_db.RegisterMessage(helloworldResponse)
+
+
+
+_LM_SERVICE = _descriptor.ServiceDescriptor(
+  name='lm_Service',
+  full_name='Reflector.lm_Service',
+  file=DESCRIPTOR,
+  index=0,
+  options=None,
+  serialized_start=202,
+  serialized_end=282,
+  methods=[
+  _descriptor.MethodDescriptor(
+    name='sub',
+    full_name='Reflector.lm_Service.sub',
+    index=0,
+    containing_service=None,
+    input_type=_HELLOWORLDREQUEST,
+    output_type=_HELLOWORLDRESPONSE,
+    options=None,
+  ),
+])
+_sym_db.RegisterServiceDescriptor(_LM_SERVICE)
+
+DESCRIPTOR.services_by_name['lm_Service'] = _LM_SERVICE
 
 
 _SERVICE = _descriptor.ServiceDescriptor(
   name='Service',
   full_name='Reflector.Service',
   file=DESCRIPTOR,
-  index=0,
+  index=1,
   options=None,
-  serialized_start=95,
-  serialized_end=156,
+  serialized_start=284,
+  serialized_end=345,
   methods=[
   _descriptor.MethodDescriptor(
     name='ack',

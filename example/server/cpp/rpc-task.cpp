@@ -53,6 +53,15 @@ QByteArray RpcTask::process(QByteArray req_msg) {
 
         m_div_res.set_value(m_div_req.lhs() / m_div_req.rhs());
         m_res.set_data(m_div_res.SerializeAsString());
+    } else if (m_req.name() == ".Lm.lm_Service.sub") {
+        bool sub_parsed = m_lm_sub_req.ParseFromString(m_req.data());
+        Q_ASSERT(sub_parsed);
+	std::string result("hello " +
+                  std::to_string(m_lm_sub_req.id()) + " !");
+
+        //m_lm_sub_res.set_value(m_lm_sub_req.lhs() - m_lm_sub_req.rhs());
+        m_lm_sub_res.set_str(result);
+        m_res.set_data(m_lm_sub_res.SerializeAsString());
     } else {
         throw RpcException(QString(m_req.name().c_str()).append(": not supported"));
     }

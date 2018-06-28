@@ -40,6 +40,9 @@ private:
     Calculator::MulResult m_mul_res;
     Calculator::DivRequest m_div_req;
     Calculator::DivResult m_div_res;
+private:
+    Lm::HelloworldRequest m_lm_sub_req;
+    Lm::HelloworldResponse m_lm_sub_res;
 
 private:
     QByteArray process(QByteArray);

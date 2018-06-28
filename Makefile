@@ -23,6 +23,7 @@ build-server-py: build-py.pb
 
 build-cpp.pb:
 	cd example/protocol && protoc --proto_path=. --cpp_out=. *.proto
+	cd example/server/cpp/protocol  && protoc --proto_path=. --cpp_out=. *.proto
 build-py.pb:
 	cd example/protocol && touch __init__.py
 	cd example/protocol && protoc --proto_path=. --python_out=. *.proto
@@ -33,7 +34,7 @@ build-py.pb:
 clean: \
 	clean-lib clean-server
 clean-lib:
-	rm node_modules -rf
+	rm -rf node_modules
 clean-protocol:
 	rm example/protocol/__init__.py -f
 	rm example/protocol/*_pb2.py -f
@@ -42,10 +43,10 @@ clean-protocol:
 clean-server: \
 	clean-server-cpp clean-server-py
 clean-server-cpp:
-	rm example/server/cpp/build -rf
+	rm -rf example/server/cpp/build
 clean-server-py:
-	rm example/server/py/{build,dist,env} -rf
-	rm example/server/py/*.egg-info -rf
+	rm -rf example/server/py/{build,dist,env}
+	rm -rf example/server/py/*.egg-info
 
 ###############################################################################
 ###############################################################################

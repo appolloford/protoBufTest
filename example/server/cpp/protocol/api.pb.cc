@@ -45,16 +45,18 @@ void protobuf_RegisterTypes(const ::std::string&) {
 void AddDescriptorsImpl() {
   InitDefaults();
   static const char descriptor[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-      "\n\tapi.proto\032\016listener.proto\032\017reflector.p"
-      "roto\032\020calculator.protoP\000P\001P\002b\006proto3"
+      "\n\tapi.proto\032\017reflector.proto\032\016listener.p"
+      "roto\032\020calculator.proto\032\023lm.helloworld.pr"
+      "otoP\000P\001P\002P\003b\006proto3"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 76);
+      descriptor, 99);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "api.proto", &protobuf_RegisterTypes);
-  ::protobuf_listener_2eproto::AddDescriptors();
   ::protobuf_reflector_2eproto::AddDescriptors();
+  ::protobuf_listener_2eproto::AddDescriptors();
   ::protobuf_calculator_2eproto::AddDescriptors();
+  ::protobuf_lm_2ehelloworld_2eproto::AddDescriptors();
 }
 
 void AddDescriptors() {
