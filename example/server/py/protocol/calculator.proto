@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+package Calculator;
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+message AddRequest {
+    int32 lhs = 1;
+    int32 rhs = 2;
+}
+message AddResult {
+    int32 value = 1;
+}
+
+message SubRequest {
+    int32 lhs = 1;
+    int32 rhs = 2;
+}
+message SubResult {
+    int32 value = 1;
+}
+
+message MulRequest {
+    int32 lhs = 1;
+    int32 rhs = 2;
+}
+message MulResult {
+    int32 value = 1;
+}
+
+message DivRequest {
+    int32 lhs = 1;
+    int32 rhs = 2;
+}
+message DivResult {
+    int32 value = 1;
+}
+
+service Service {
+    rpc add(AddRequest) returns(AddResult);
+    rpc sub(SubRequest) returns(SubResult);
+    rpc mul(MulRequest) returns(MulResult);
+    rpc div(DivRequest) returns(DivResult);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////

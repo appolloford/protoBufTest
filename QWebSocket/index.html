@@ -9,17 +9,31 @@
     //BEGIN SETUP
     var HelloWorld;
     var helloWorld;
-    var buffer
+    var buffer, testDecode;
+
     protobuf.load("./lm.helloworld.proto", function (err, root) {
     // protobuf.load({root:"/data/NamespaceUpdated/CARTAvis/carta/cpp/core/Data/Image/", file:"lm.helloworld.proto"}, (err, root) => {
       if (err) throw err;
       console.log("ROOT: ", root);
       HelloWorld = root.lookupType("lm.helloworld");
       console.log("HelloWorld", HelloWorld);
-      helloWorld = HelloWorld.create({ id : "1", str : "hello" });
+      helloWorld = HelloWorld.create({ id : "101", str : "hello" });
+      console.log('helloWorld: ', helloWorld);
       buffer = HelloWorld.encode(helloWorld).finish();
+      testDecode = HelloWorld.decode(buffer);
       console.log("Test encoding", buffer);
+      console.log("Test decoding", testDecode);
+
     });
+
+    function blobToArrayBuffer(blob) {
+      var fileReader = new FileReader();
+      return new Promise(function(resolve, reject) {
+         fileReader.onload = resolve;
+         fileReader.onerror = reject;
+         fileReader.readAsArrayBuffer(blob);
+      });
+    }
 
     function output(message) {
         var output = document.getElementById("output");
@@ -30,8 +44,10 @@
     function sendMessage() {
       if ( socket != null )
       {
-        socket.send( "testProtoBuf" );
-        console.log( "string sent" );
+        // socket.send( "testProtoBuf" );
+        socket.send(buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.length));
+        // console.log( "string sent" );
+        console.log( "binary sent" );
       }
     }
 
@@ -40,6 +56,9 @@
 
       output("Connecting to WebSocket server at " + baseUrl + ".");
       socket = new WebSocket(baseUrl);
+
+      // Setting binaryType to accept received binary as either 'blob' or 'arraybuffer'
+      socket.binaryType = 'arraybuffer';
 
       socket.onclose = function() {
         console.error("web socket closed");
@@ -51,12 +70,33 @@
         output("WebSocket connected.");
       }
       socket.onmessage = function(msg) {
-        var result = msg.data;
-        console.log("Received message:", result);
-        var arraybuf = new TextEncoder("utf-8").encode(result);
-        console.log(arraybuf);
-        var helloWorld = HelloWorld.decode(arraybuf);
+        console.log("Received message:", msg.data);
+        var u8 = new Uint8Array(msg.data);
+        console.log('u8: ', u8);
+        var helloWorld = HelloWorld.decode(u8);
         console.log('Decoding result:', helloWorld);
+
+
+
+        // blobToArrayBuffer(msg.data).then(buffer => {
+          // Don't know why going through the explicitOriginalTarget
+          // console.log('buffer: ', buffer.explicitOriginalTarget.result);
+
+        //   var u8 = new Uint8Array(buffer.explicitOriginalTarget.result);
+        //   console.log('u8: ', u8);
+	      //   var helloWorld = HelloWorld.decode(u8);
+        //   console.log('Decoding result:', helloWorld);
+        // });
+        // use the JS API to convert to the ArrayBuffer from BLOB.
+        // var fileReader = new FileReader();
+        // fileReader.onload = (event) => {
+        //   let arraybuf = this.result;
+          // };
+        // fileReader.readAsArrayBuffer(msg.data);
+        // console.log('Buffer converted: ', arraybuf);
+        // var helloWorld = HelloWorld.decode(arraybuf);
+        // console.log('Decoding result:', helloWorld);
+
       }
     }
     //END SETUP
@@ -81,7 +121,7 @@
     </style>
 </head>
 <body>
-  <textarea id="output"></textarea><br /> 
+  <textarea id="output"></textarea><br />
   <button onClick="sendMessage();">Send</button>
 </body>
 </html>

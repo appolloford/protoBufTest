@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package Lm;
+
+
+message HelloworldRequest
+{
+   int32     id = 1;  // ID
+   string    str = 2;  // str
+   int32     opt = 3;  //optional field
+}
+message HelloworldResponse
+{
+   string    str = 1;  // str
+   int32     opt = 2;  //optional field
+}
+
+service lm_Service {
+    rpc sub(HelloworldRequest) returns(HelloworldResponse);
+}
